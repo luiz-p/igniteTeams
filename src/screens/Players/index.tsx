@@ -1,93 +1,99 @@
-import { useEffect, useState, useRef } from 'react';
-import { Alert, FlatList, TextInput } from 'react-native';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useEffect, useRef, useState } from 'react'
 
+import { Alert, FlatList, TextInput } from 'react-native'
 
-import { Header } from "@components/Header";
-import { Highlight } from "@components/Highlight";
-import { ButtonIcon } from "@components/ButtonIcon";
-import { Filter } from "@components/Filter";
-import { Input } from "@components/Input";
-import { PlayerCard } from '@components/PlayerCard';
-import { ListEmpty } from '@components/ListEmpty';
-import { Button } from '@components/Button';
+import { Button } from '@components/Button'
+import { ButtonIcon } from '@components/ButtonIcon'
+import { Filter } from '@components/Filter'
+import { Header } from '@components/Header'
+import { Highlight } from '@components/Highlight'
+import { Input } from '@components/Input'
+import { ListEmpty } from '@components/ListEmpty'
+import { PlayerCard } from '@components/PlayerCard'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { groupRemoveByName } from '@storage/group/groupRemoveByName'
+import { playerAddByGroup } from '@storage/player/playerAddByGroup'
+import { playerRemoveByGroup } from '@storage/player/playerRemoveByGroup'
+import {
+  playersGetByGroupAndTeam
+} from '@storage/player/playersGetByGroupAndTeam'
+import { PlayerStorageDTO } from '@storage/player/PlayerStorageDTO'
 
-import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
-import { AppError } from '../../utils/AppError';
-import { playerAddByGroup } from '@storage/player/playerAddByGroup';
-import { playersGetByGroup } from '@storage/player/playersGetByGroup';
-import { playersGetByGroupAndTeam } from '@storage/player/playersGetByGroupAndTeam';
-import { PlayerStorageDTO } from '@storage/player/PlayerStorageDTO';
-import { playerRemoveByGroup } from '@storage/player/playerRemoveByGroup';
-import { groupRemoveByName } from '@storage/group/groupRemoveByName';
+import { AppError } from '../../utils/AppError'
+import {
+  Container,
+  Form,
+  HeaderList,
+  NumberOfPlayers
+} from './styles'
 
 type RouteParams = {
   group: string;
 }
 
-export function Players() {
-  const [team, setTeam] = useState('Time A');
-  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
-  const [newPlayerName, setNewPlayerName] = useState('');
+export function Players () {
+  const [team, setTeam] = useState('Time A')
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([])
+  const [newPlayerName, setNewPlayerName] = useState('')
 
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { group } = route.params as RouteParams;
-  const newPlayerNameInputRef = useRef<TextInput>(null);
+  const route = useRoute()
+  const navigation = useNavigation()
+  const { group } = route.params as RouteParams
+  const newPlayerNameInputRef = useRef<TextInput>(null)
 
-  async function handleAddPlayer() {
+  async function handleAddPlayer () {
     if (newPlayerName.trim().length === 0) {
-      return Alert.alert('Nova pessoa', 'Infome o nome da pessoa para adicionar.');
+      return Alert.alert('Nova pessoa', 'Infome o nome da pessoa para adicionar.')
     }
     const newPlayer = {
       name: newPlayerName,
-      team,
+      team
     }
 
     try {
-      await playerAddByGroup(newPlayer, group);
+      await playerAddByGroup(newPlayer, group)
 
-      newPlayerNameInputRef.current?.blur();
+      newPlayerNameInputRef.current?.blur()
 
-      setNewPlayerName('');
-      fetchPlayerByTeam();
+      setNewPlayerName('')
+      fetchPlayerByTeam()
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Nova pessoa', error.message);
+        Alert.alert('Nova pessoa', error.message)
       } else {
-        Alert.alert('Nova pessoa', 'Não foi possível adicionar.');
+        Alert.alert('Nova pessoa', 'Não foi possível adicionar.')
       }
     }
   }
 
-  async function fetchPlayerByTeam() {
+  async function fetchPlayerByTeam () {
     try {
-      const playerByTeam = await playersGetByGroupAndTeam(group, team);
-      setPlayers(playerByTeam);
+      const playerByTeam = await playersGetByGroupAndTeam(group, team)
+      setPlayers(playerByTeam)
     } catch (error) {
-      Alert.alert('Pessoas', 'Não foi possível carregar as pessoas do time selecionado.');
+      Alert.alert('Pessoas', 'Não foi possível carregar as pessoas do time selecionado.')
     }
   }
-  
-  async function handlePlayerRemove(playerName: string) {
+
+  async function handlePlayerRemove (playerName: string) {
     try {
-      await playerRemoveByGroup(playerName, group);
-      fetchPlayerByTeam();
+      await playerRemoveByGroup(playerName, group)
+      fetchPlayerByTeam()
     } catch (error) {
       Alert.alert('Remover Pessoa', 'Não foi possível remover essa pessoa.')
     }
   }
 
-  async function groupRemove() {
+  async function groupRemove () {
     try {
-      await groupRemoveByName(group);
-      navigation.navigate('groups');
+      await groupRemoveByName(group)
+      navigation.navigate('groups')
     } catch (error) {
-      Alert.alert('Remover grupo', 'Não foi possível remover o grupo');
+      Alert.alert('Remover grupo', 'Não foi possível remover o grupo')
     }
   }
 
-  async function handleGroupRemove() {
+  async function handleGroupRemove () {
     Alert.alert(
       'Remover',
       'Deseja remover o grupo?',
@@ -99,8 +105,8 @@ export function Players() {
   }
 
   useEffect(() => {
-    fetchPlayerByTeam();
-  }, [team]);
+    fetchPlayerByTeam()
+  }, [team])
 
   return (
     <Container>

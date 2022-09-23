@@ -1,56 +1,56 @@
-import { useCallback, useState } from 'react';
-import { FlatList } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
+import { useCallback, useState } from 'react'
 
-import { GroupCard } from '@components/GroupCard';
-import { Header } from '@components/Header';
-import { Highlight } from '@components/Highlight';
-import { ListEmpty } from '@components/ListEmpty';
-import { Button } from '@components/Button';
+import { FlatList } from 'react-native'
 
-import { Container } from './styles';
-import { groupsGetAll } from '@storage/group/groupsGetAll';
+import { Button } from '@components/Button'
+import { GroupCard } from '@components/GroupCard'
+import { Header } from '@components/Header'
+import { Highlight } from '@components/Highlight'
+import { ListEmpty } from '@components/ListEmpty'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { groupsGetAll } from '@storage/group/groupsGetAll'
 
-export function Groups() {
-  const [groups, setGroups] = useState<string[]>([]);
+import { Container } from './styles'
 
-  const navigation = useNavigation();
+export function Groups () {
+  const [groups, setGroups] = useState<string[]>([])
 
-  function handleNewGroup() {
-    navigation.navigate('new');
+  const navigation = useNavigation()
+
+  function handleNewGroup () {
+    navigation.navigate('new')
   }
 
-  async function fetchGroups() {
+  async function fetchGroups () {
     try {
-      const data = await groupsGetAll();
-      setGroups(data);
+      const data = await groupsGetAll()
+      setGroups(data)
     } catch (error) {
       //
     }
   }
 
-  function handleOpenGroup(group: string) {
-    navigation.navigate('players', { group }); 
+  function handleOpenGroup (group: string) {
+    navigation.navigate('players', { group })
   }
 
-  
   useFocusEffect(useCallback(() => {
-    fetchGroups();
-  }, []));
+    fetchGroups()
+  }, []))
 
   return (
     <Container>
       <Header />
-      <Highlight 
+      <Highlight
         title="Turmas"
         subtitle="jogue com sua turma"
       />
 
-      <FlatList 
+      <FlatList
         data={groups}
         keyExtractor={item => item}
         renderItem={({ item }) => (
-          <GroupCard 
+          <GroupCard
             title={item}
             onPress={() => handleOpenGroup(item)}
           />
@@ -61,10 +61,10 @@ export function Groups() {
         )}
       />
 
-      <Button 
+      <Button
         title='Criar nova turma'
         onPress={handleNewGroup}
       />
     </Container>
-  );
+  )
 }

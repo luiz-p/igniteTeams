@@ -1,5 +1,5 @@
-import styled, { css } from 'styled-components/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import styled, { css } from 'styled-components/native'
+import { MaterialIcons } from '@expo/vector-icons'
 
 export const Container = styled.View`
   width: 100%;
@@ -10,7 +10,7 @@ export const Container = styled.View`
   align-items: center;
   
   margin-bottom: 16px;
-`;
+`
 
 export const Name = styled.Text`
   flex: 1;
@@ -19,7 +19,7 @@ export const Name = styled.Text`
     color: ${theme.COLORS.GRAY_200};
     font-family: ${theme.FONT_FAMILY.REGULAR};
   `}
-`;
+`
 
 export const Icon = styled(MaterialIcons).attrs(({ theme }) => ({
   size: 24,
@@ -27,4 +27,4 @@ export const Icon = styled(MaterialIcons).attrs(({ theme }) => ({
 }))`
   margin-left: 16px;
   margin-right: 4px;
-`;
+`

@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components/native";
+import styled, { css } from 'styled-components/native'
 
 export type ButtonTypeStyleProps = 'PRIMARY' | 'SECONDARY';
 
@@ -15,7 +15,7 @@ export const Container = styled.TouchableOpacity<Props>`
   
   justify-content: center;
   align-items: center;
-`;
+`
 
 export const Title = styled.Text`
   ${({ theme }) => css`
@@ -23,4 +23,4 @@ export const Title = styled.Text`
     color: ${theme.COLORS.WHITE};
     font-family: ${theme.FONT_FAMILY.BOLD};
   `};
-`;
+`

@@ -1,16 +1,17 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { PLAYER_COLLECTION } from "@storage/storageConfig";
-import { playersGetByGroup } from "./playersGetByGroup";
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { PLAYER_COLLECTION } from '@storage/storageConfig'
 
-export async function playerRemoveByGroup(playerName: string, group: string) {
+import { playersGetByGroup } from './playersGetByGroup'
+
+export async function playerRemoveByGroup (playerName: string, group: string) {
   try {
-    const storage = await playersGetByGroup(group);
+    const storage = await playersGetByGroup(group)
 
-    const filtered = storage.filter(player => player.name !== playerName);
-    const players = JSON.stringify(filtered);
+    const filtered = storage.filter(player => player.name !== playerName)
+    const players = JSON.stringify(filtered)
 
-    await AsyncStorage.setItem(`${PLAYER_COLLECTION}-${group}`, players);
+    await AsyncStorage.setItem(`${PLAYER_COLLECTION}-${group}`, players)
   } catch (error) {
-    throw error;
+    throw error
   }
 }
